@@ -1,0 +1,14 @@
+.title {
+  margin: 20px 0;
+  padding: 20px 0;
+  color: #009369;
+  font-family: "Poppins", Sans-serif;
+  font-size: 50px;
+  font-weight: 600;
+}
+
+@media only screen and (max-width: 550px) {
+  .title {
+    font-size: 30px;
+  }
+}
