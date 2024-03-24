@@ -5,7 +5,7 @@ const useClientForm = () => {
   const postData = async (formData: FormData) => {
     console.log(JSON.stringify(formData));
     try {
-      const response = await fetch('http://localhost:3333/clients', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/clients`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -25,7 +25,7 @@ const useClientForm = () => {
 
   const putData = async (clientId: number, formData: FormData) => {
     try {
-      const response = await fetch(`http://localhost:3333/clients/${clientId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/clients/${clientId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
