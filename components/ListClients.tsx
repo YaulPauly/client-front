@@ -1,23 +1,10 @@
 'use client'
-import { Button, ConfigProvider, GetProp, Table, TableProps } from "antd";
+import { Button, ConfigProvider, Table, TableProps } from "antd";
 import { useEffect, useState } from "react";
 import qs from 'qs';
 import styles from './listClients.module.css'
-import { redirect, useRouter } from "next/navigation";
-
-type ColumnsType<T> = TableProps<T>['columns']
-type TablePaginationConfig = Exclude<GetProp<TableProps, 'pagination'>, boolean>
-
-interface DataType {
-    id: number
-    full_name: string
-    age: number;
-    birthdate: string
-}
-
-interface TableParams {
-    pagination?: TablePaginationConfig;
-}
+import { useRouter } from "next/navigation"
+import { ColumnsType, DataType, TableParams } from "@/app/Interface"
 
 
 const getRandomuserParams = (params: TableParams) => ({
@@ -36,8 +23,6 @@ const ListClients = () => {
     });
     const [total, setTotal] = useState(0);
 
-    let id: number
-
     const fetchData = async () => {
         const response = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/clients?${qs.stringify(
@@ -49,13 +34,11 @@ const ListClients = () => {
             throw new Error("Cannot fetch data. Response status is not 200.");
         }
 
-        const data = await response.json();
-        console.log("dataID:", data.id);
-        
+        const data = await response.json();       
 
         setData(data.data.map((client: DataType, dataIndex: number) => ({
             key: dataIndex,
-            ...client
+            ...client,
         })))
         setTotal(data.total)
     };
@@ -100,7 +83,8 @@ const ListClients = () => {
         {
             title: '',
             dataIndex: 'update',
-            render: () => {
+            render: (_, record) => {
+                const {id} = record
                 return (
                     <ConfigProvider
                         theme={{

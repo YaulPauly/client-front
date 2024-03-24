@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/error-message": "^2.0.1",
     "antd": "^5.15.3",
     "next": "14.1.4",
     "qs": "^6.12.0",
