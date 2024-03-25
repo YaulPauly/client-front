@@ -1,36 +1,25 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Proyecto Next.js con Microservicio de Gestión de Clientes
 
-## Getting Started
+Este proyecto es una aplicación web desarrollada con Next.js, un framework de React para la construcción de aplicaciones web modernas y rápidas. Además, integra un microservicio de gestión de clientes en el backend.
 
-First, run the development server:
+## Tecnologías Utilizadas
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **React**: Biblioteca de JavaScript para construir interfaces de usuario.
+- **Next.js**: Framework de React que permite el renderizado del lado del servidor, enrutamiento y otras características para la construcción de aplicaciones web modernas.
+- **Microservicio de Gestión de Clientes**: Backend que proporciona endpoints para registrar, consultar, actualizar y eliminar clientes. También ofrece una lista paginada de clientes.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Configuración del Entorno Local
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clona el repositorio desde GitHub.
+2. Asegúrate de tener Node.js instalado en tu máquina.
+3. Abre una terminal y navega hasta el directorio del proyecto.
+4. Ejecuta `npm install` para instalar las dependencias del proyecto.
+5. Crea un archivo `.env.local` en la raíz del proyecto y define la variable de entorno `NEXT_PUBLIC_API_URL` con la URL de la API del microservicio de gestión de clientes.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Pasos para Ejecutar el Proyecto Localmente
 
-## Learn More
+1. Abre una terminal en el directorio del proyecto.
+2. Ejecuta `npm run dev` para iniciar el servidor de desarrollo.
+3. Abre tu navegador web y navega a [http://localhost:3000](http://localhost:3000) para ver la aplicación en funcionamiento.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+¡Listo! Ahora puedes comenzar a desarrollar tu aplicación utilizando Next.js y React, integrando funcionalidades con el microservicio de gestión de clientes en el backend. Los cambios que realices en los archivos se reflejarán automáticamente en el navegador durante el desarrollo.
