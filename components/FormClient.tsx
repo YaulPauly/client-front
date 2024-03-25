@@ -1,88 +1,142 @@
-'use client'
-import { FieldErrors, useForm } from "react-hook-form"
-import styles from './formCLient.module.css'
-import Title from "./Title"
-import { useRouter } from "next/navigation"
-import { FormData, IFormClient } from "@/app/Interface"
-import useCustomFormValidation from "@/hooks/useValidationForm"
-import useClientForm from "@/hooks/useClientForm"
+"use client";
+import styles from "@/components/formCLient.module.css";
+import { useRouter, useParams } from "next/navigation";
+import { FormData, IFormClient } from "@/app/Interface";
+import useClientForm from "@/hooks/useClientForm";
+import { useEffect } from "react";
+import Title from "@/components/Title";
+import { useFormik } from "formik";
+import { IUpdateClientForm, initialValues, validationSchemaUpdateClient } from "@/forms/updateClient";
+import { Button, ConfigProvider, Layout } from "antd";
 
 const FormClient: React.FC<IFormClient> = ({ title, nameButton }) => {
-    const router = useRouter()
-    const  { postData, putData } = useClientForm()
-    const { validateFieldLetters, validateBirthDate, validateFieldEmail } = useCustomFormValidation();
-    const {
-        register,
-        handleSubmit,
-        formState: { errors }
-    } = useForm<FormData>()
+    const router = useRouter();
+    const params = useParams<{ id: string; item: string }>()
+    const id = Number(params.id)
+    const { postData, putData, getClientById } = useClientForm()
+    const formik = useFormik<IUpdateClientForm>({
+        initialValues,
+        validationSchema: validationSchemaUpdateClient,
+        onSubmit: (values) => {
+            console.log("values al finalizar validaciones", values); //invoco al modal
+            if (nameButton.toLocaleLowerCase() === 'register') {
+                postData(values)
+            } else if (nameButton.toLocaleLowerCase() === 'update' && id) {
+                putData(id, values)
+            }
+        },
+    });
 
-    const onSubmit = handleSubmit(async({ name, surname, mothersSurname, email, birthdate }) => {
-        validateFieldLetters(name, 'name')
-        validateFieldLetters(surname, 'surname')
-        validateFieldEmail(email)
-        validateBirthDate(birthdate)
+    const { handleSubmit, setValues, values, errors } = formik;
 
-        if (title.toLocaleLowerCase() === 'register') {
-            await postData({ name, surname, mothersSurname, email, birthdate });
-        } else if (title.toLocaleLowerCase() === 'update') {
-            await putData(20, { name, surname, mothersSurname, email, birthdate });
+    useEffect(() => {
+        if (nameButton.toLocaleLowerCase() === 'update' && id) {
+            getClientById(id).then((client: FormData | null) => {
+                if (client) {
+                    const { name, surname, mothersSurname, email, birthdate } = client
+                    setValues({
+                        name,
+                        surname,
+                        mothersSurname,
+                        email,
+                        birthdate
+                    })
+                }
+            }).catch(error => {
+                console.error('Error fetching client data:', error)
+            })
         }
+    }, [id])
 
-        router.push('/');
-
-    })
-
-    const renderErrorMessage = (fieldName: keyof FieldErrors<FormData>) => {
-        const error = errors[fieldName]
-        return error && (
-            <span style={{ color: "#ee2a2a", fontSize: '12px', fontWeight: '600' }}>
-                {error.type === "required" && `This ${fieldName} field is required`}
-                {error.type === "minLength" && `This ${fieldName} field has a minimum number of characters`}
-                {error.type === "birthdateValidation" && "The date must be 18 years ago or earlier"}
-                {error.type === "pattern" && `${fieldName} must contain only letters`}
-                {error.type === "patternEmail" && "Invalid email format"}
-            </span>
-        );
-    }
-
-
+    console.log({values});
+    console.log({nameButton})
+    
     return (
-        <>
+        <Layout className={styles.layout}>
             <Title title={title} />
-            <form onSubmit={onSubmit} className={styles.container_form} >
-                <label className={styles.form_label}>Name{' '}
-                    <input {...register("name", { required: true, minLength: 2 })} className={styles.form_input__text} />
-                </label>
-                {renderErrorMessage("name")}
+            <div className={styles.container}>
+                <form onSubmit={handleSubmit} className={styles.container_form}>
+                    <label className={styles.form_label}>
+                        Name{" "}
+                        <input
+                            {...formik.getFieldProps("name")}
+                            className={styles.form_input__text}
+                        />
+                    </label>
+                    {errors.name && <p className={styles.form_text_error}>{errors.name}</p>}
 
-                <label className={styles.form_label}>Surname{' '}
-                    <input {...register("surname", { required: true, minLength: 2 })} className={styles.form_input__text} />
-                </label>
-                {renderErrorMessage("surname")}
+                    <label className={styles.form_label}>
+                        Surname{" "}
+                        <input
+                            {...formik.getFieldProps("surname")}
+                            className={styles.form_input__text}
+                        />
+                    </label>
+                    {errors.surname && <p className={styles.form_text_error}>{errors.surname}</p>}
 
-                <label className={styles.form_label}>Mothers Surname{' '}(Optional)
-                    <input {...register("mothersSurname")} className={styles.form_input__text} />
-                </label>
-                {renderErrorMessage("mothersSurname")}
+                    <label className={styles.form_label}>
+                        Mothers Surname (Optional){" "}
+                        <input
+                            {...formik.getFieldProps("mothersSurname")}
+                            className={styles.form_input__text}
+                        />
+                    </label>
+                    {errors.mothersSurname && <p className={styles.form_text_error}>{errors.mothersSurname}</p>}
 
-                <label className={styles.form_label}>Email{' '}
-                    <input {...register("email", { required: true, minLength: 6 })} className={styles.form_input__text} />
-                </label>
-                {renderErrorMessage("email")}
+                    <label className={styles.form_label}>
+                        Email{" "}
+                        <input
+                            {...formik.getFieldProps("email")}
+                            className={styles.form_input__text}
+                        />
+                    </label>
+                    {errors.email && <p className={styles.form_text_error}>{errors.email}</p>}
 
-                <label className={styles.form_label}>Birthdate{' '}
-                    <input {...register("birthdate", { required: true })} type="date" className={styles.form_input__text} />
-                </label>
-                {renderErrorMessage("birthdate")}
 
-                <div className={styles.form_acctions}>
-                    <input type="submit" className={styles.form_input__submit} value={nameButton} />
-                    <button type="button" className={styles.form_button__cancelar} onClick={() => router.push('/')}>Cancelar</button>
-                </div>
-            </form>
-        </>
+                    <label className={styles.form_label}>
+                        Birthdate{" "}
+                        <input
+                            {...formik.getFieldProps("birthdate")}
+                            className={styles.form_input__text}
+                            type="date"
+                        />
+                    </label>
+
+                    <div className={styles.form_acctions}>
+                        <ConfigProvider
+                            theme={{
+                                components: {
+                                    Button: {
+                                        defaultHoverBg: '#20602a',
+                                        defaultHoverColor: 'white',
+                                        defaultActiveBg:'#20602a',
+                                        defaultActiveColor: 'white'
+                                    },
+                                },
+                            }}
+                        >
+                            <Button type="default" htmlType="submit" className={styles.form_input__submit}>{nameButton}</Button>
+                        </ConfigProvider>
+                        <ConfigProvider
+                            theme={{
+                                components: {
+                                    Button: {
+                                        defaultHoverBg: '#7e2d25',
+                                        defaultHoverColor: 'white',
+                                        defaultActiveBg:'#7e2d25',
+                                        defaultActiveColor: 'white'
+                                    },
+                                },
+                            }}
+                        >
+                            <Button type="default" onClick={() => router.push('/')} className={styles.form_button__cancelar}>Cancel</Button>
+                        </ConfigProvider>
+
+                    </div>
+                </form>
+            </div>
+        </Layout>
     );
-}
+};
 
-export default FormClient
+export default FormClient;

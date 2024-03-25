@@ -5,6 +5,7 @@ import qs from 'qs';
 import styles from './listClients.module.css'
 import { useRouter } from "next/navigation"
 import { ColumnsType, DataType, TableParams } from "@/app/Interface"
+import Swal from "sweetalert2";
 
 
 const getRandomuserParams = (params: TableParams) => ({
@@ -59,6 +60,48 @@ const ListClients = () => {
         }
     };
 
+    const showDeleteConfirmationModal = async (id : number)  => {
+        const confirmed = await Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        });
+        if (confirmed.isConfirmed) {
+            try {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/clients/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                console.log({response});
+                
+                if (!response.ok) {
+                    throw new Error("Failed to delete client.");
+                }
+    
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "The client has been deleted.",
+                    icon: "success"
+                });
+    
+                fetchData();
+            } catch (error) {
+                console.error("Error deleting client:", error);
+                Swal.fire({
+                    title: "Error!",
+                    text: "Failed to delete the client. Please try again later.",
+                    icon: "error"
+                });
+            }
+        }
+    };
+
     const columns: ColumnsType<DataType> = [
         {
             title: 'ID',
@@ -90,23 +133,25 @@ const ListClients = () => {
                         theme={{
                             components: {
                                 Button: {
-                                    defaultBorderColor: "#FFD300",
-                                    defaultColor: "#FFD300",
-                                    defaultHoverBorderColor: "black",
-                                    defaultHoverColor: "black"
-    
+                                    defaultHoverBg: "#e1b635",
+                                    defaultHoverBorderColor: "#e1b635",
+                                    defaultHoverColor: 'white',
+                                    defaultActiveBg:'#e1b635',
+                                    defaultActiveBorderColor: '#e1b635',
+                                    defaultActiveColor: 'white'
                                 },
                             },
                         }}
                     >
-                        <Button type="default" onClick={() => router.push(`/update-client/${id}`)}>Update</Button>
+                        <Button type="default" onClick={() => router.push(`/update-client/${id}`)} className={styles.table_button__update}>Update</Button>
                     </ConfigProvider>)
             },
         },
         {
             title: '',
             dataIndex: 'delete',
-            render: () => {
+            render: (_, record) => {
+                const {id} = record
                 return (
                     <ConfigProvider
                         theme={{
@@ -117,7 +162,7 @@ const ListClients = () => {
                             },
                         }}
                     >
-                        <Button type="primary" danger>Delete</Button>
+                        <Button type="primary" danger onClick={() => showDeleteConfirmationModal(id)}>Delete</Button>
                     </ConfigProvider>)
             },
         },
@@ -130,6 +175,7 @@ const ListClients = () => {
             pagination={{ total, ...tableParams.pagination }}
             onChange={handleTableChange}
             className={styles.table_clients}
+            scroll={{ x: 400 }}
         />
     );
 }

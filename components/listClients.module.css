@@ -2,3 +2,9 @@
     min-height: 800px;
     margin: 15px 0;
 }
+
+.table_button__update {
+    background: #ffc107;
+    color: white;
+    border-color: #ffc107;
+}

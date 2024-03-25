@@ -2,8 +2,9 @@ import FormClient from "@/components/FormClient"
 import styles from './page.module.css'
 
 const UpdateClients = () => {
-  let title = "Update Client"
-  let buttonUpdate = "UPDATE"
+  const title = "Update Client"
+  const buttonUpdate = "Update";
+
   return (
     <div className={styles.container_update}>
       <FormClient title={title} nameButton={buttonUpdate}/>

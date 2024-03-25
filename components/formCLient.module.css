@@ -1,6 +1,27 @@
+.layout {
+    max-width: 1200px;
+    width: 80%;
+    margin-top: 40px;
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background: white;
+    display: flex;
+    justify-content: center;
+    border-radius: 20px;
+    max-width: 700px;
+    width: 100%;
+    margin: 20px 0;
+}
+
 .container_form {
     min-width: 250px;
-    width: 40%;
+    width: 70%;
     margin: 0 10px;
 }
 
@@ -12,12 +33,14 @@
     color: black;
     font-size: 14px;
     font-weight: 200;
+    min-width: 150px;
 }
 
 .form_input__text {
     display: block;
     box-sizing: border-box;
     width: 100%;
+    min-width: 150px;
     border-radius: 4px;
     border: 1px solid black;
     padding: 10px 15px;
@@ -28,32 +51,49 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    align-items: center;
+    margin: 20px 0;
 }
 .form_input__submit {
-    background: #26e342;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #3bac4c;
+    border-color: #3bac4c;
     color: white;
-    text-transform: uppercase;
+    text-transform: capitalize;
     border: none;
-    margin-top: 40px;
-    padding: 20px;
     font-size: 16px;
     font-weight: 100;
-    letter-spacing: 10px;
-    min-width: 200px;
+    letter-spacing: 2px;
+    min-width: 170px;
     width: 40%;
+    padding: 20px;
+    margin: 10px 0;
+}
+
+.form_text_error {
+    color: #c63d3d;
+    font-size: 12px;
+    font-weight: 600;
+    width: 150px;
 }
 
 .form_button__cancelar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background: #f82916;
+    border-color: #f82916;
     color: white;
-    text-transform: uppercase;
+    text-transform: capitalize;
     border: none;
-    margin-top: 40px;
     padding: 20px;
+    margin: 10px 0;
     font-size: 16px;
     font-weight: 100;
-    letter-spacing: 10px;
-    min-width: 200px;
+    letter-spacing: 2px;
+    min-width: 170px;
     width: 40%;
 }
 
@@ -63,6 +103,15 @@
 }
 
 .form_button__cancelar:hover {
-    background: #e75b8c;
+    background: #c63d3d;
     cursor: pointer;
+}
+
+@media only screen and (max-width: 410px) {
+.form_input__submit {
+    font-size: 12px;
+}
+    .form_button__cancelar {
+        font-size: 12px;
+    }
 }
